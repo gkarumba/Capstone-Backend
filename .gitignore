@@ -1,0 +1,6 @@
+.env
+django-env/
+.vscode/
+settings.json
+*.pyc
+migrations/
