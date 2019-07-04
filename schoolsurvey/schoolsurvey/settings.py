@@ -38,9 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'survey',
     'rest_framework.authtoken',
     'rest_auth',
     'users'
+
 ]
 
 MIDDLEWARE = [
@@ -84,7 +86,8 @@ DATABASES = {
         'USER': 'postgres',
         'HOST': 'localhost',
         'PORT': '5432',
-        'PASSWORD': '123456',
+        'PASSWORD': 'database',
+
     }
 }
 
