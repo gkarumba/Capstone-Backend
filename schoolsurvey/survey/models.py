@@ -35,13 +35,12 @@ class Category(models.Model):
     #VSCode will see the objects declared
     objects = models.Manager()
     
-
-
+DEFAULT_CATEGORY_ID = 1
 
 class Answers(models.Model):
     school = models.ForeignKey(User, related_name='answers', on_delete=models.CASCADE)
-    questionId = models.CharField(max_length=250)
-    answer = models.CharField(max_length=300)
+    category = models.ForeignKey(Category, related_name='answers', on_delete=models.CASCADE,default=DEFAULT_CATEGORY_ID)
+    answer = JSONBField(default=list,null=True,blank=True)
 
     def __str__(self):
         return self.answer
@@ -49,7 +48,6 @@ class Answers(models.Model):
     #VSCode will see the objects declared
     objects = models.Manager()
     
-DEFAULT_CATEGORY_ID = 1
 class Questionaire(models.Model):
     category = models.ForeignKey(Category, related_name='questionaire', on_delete=models.CASCADE,default=DEFAULT_CATEGORY_ID)
     # pages =  ArrayField(models.CharField(max_length=10485758))

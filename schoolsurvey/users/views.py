@@ -68,6 +68,7 @@ class LoginView(generics.CreateAPIView):
             return Response(data={
                 'message':'Login successful',
                 'userRole':querys[0]['role'],
+                'id': querys[0]['id'],
                 'token': serializer.data['token']
             },status=status.HTTP_200_OK)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
