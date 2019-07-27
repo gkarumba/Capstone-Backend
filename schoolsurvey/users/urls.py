@@ -1,3 +1,4 @@
+
 from django.urls import path
 from .views import  LoginView,RegisterUsersView,UserListView,UserDetailsView
 urlpatterns = [
@@ -20,3 +21,4 @@ urlpatterns = [
 #     url(r'^', include(router.urls)),
 #     url(r'^auth/', include('rest_auth.urls')),
 # ]
+

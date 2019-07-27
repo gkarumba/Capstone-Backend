@@ -1,8 +1,12 @@
+
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.postgres.fields.jsonb import JSONField as JSONBField
 from django.db import models
 from users.models import User
+
+
+
 
 # Create your models here.
 
@@ -13,6 +17,7 @@ class Survey(models.Model):
 
     def __str__(self):
         return self.name
+
 
     #VSCode will see the objects declared
     objects = models.Manager()
@@ -29,8 +34,10 @@ class Category(models.Model):
     # form_builder_json = models.CharField(max_length=255)
     # custom_submit_url = models.CharField(max_length=255)
 
+
     def __str__(self):
         return self.name
+
 
     #VSCode will see the objects declared
     objects = models.Manager()
@@ -58,3 +65,21 @@ class Questionaire(models.Model):
     
 # ArrayField(models.CharField(max_length=10485758))
     
+
+
+# class Question(models.Model):
+#     title = models.CharField(max_length=300)
+#     help = models.CharField(max_length=250)
+#     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+#     def __str__(self):
+#         return self.title
+
+
+# class Answers(models.Model):
+#     answer = models.CharField(max_length=300)
+#     question = models.ForeignKey(Question, on_delete=models.CASCADE)
+
+#     def __str__(self):
+#         return self.answer
+# >>>>>>> cf263849322247aab8b3cd232ec75db274f5cd70

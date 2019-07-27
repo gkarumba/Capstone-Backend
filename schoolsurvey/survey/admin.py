@@ -6,3 +6,4 @@ from .models import Questionaire
 admin.site.register(Survey)
 admin.site.register(Category)
 admin.site.register(Questionaire)
+
