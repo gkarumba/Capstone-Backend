@@ -1,26 +1,31 @@
 from rest_framework import serializers
-from .models import User,UserProfile
+from .models import User, UserProfile, Role
+
 
 class TokenSerializer(serializers.Serializer):
     """
     This serializer serializes the token data
     """
     token = serializers.CharField(max_length=255)
-    
+
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ("id","email","username","role")
+        fields = ("id", "email", "username", 'role')
 
 
+class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 
-# class SchoolProfileSerializer(serializers.ModelSerializer):
-    
-#     class Meta:
-#         model = SchoolProfile
-#         fields = ('doo', 'address', 'county', 'zip', 'photo')
+    class Meta:
+        model = UserProfile
+        fields = ('user', 'dob', 'city', 'address', 'county', 'zip')
 
 
+class RoleSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Role
+        fields = ('id', 'name', 'description')
 # class SchoolSerializer(serializers.HyperlinkedModelSerializer):
 #     profile = SchoolProfileSerializer(required=True)
 
@@ -53,4 +58,3 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 #         profile.save()
 
 #         return instance
-

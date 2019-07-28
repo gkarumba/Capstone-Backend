@@ -3,10 +3,10 @@ from rest_framework import permissions
 from rest_framework import viewsets, mixins, generics
 from .models import Survey, Category, Answers, Questionaire
 from .serializers import (SurveySerializer, CategorySerializer,
-                 AnswersSerializer, QuestionaireSerializer)
+                          AnswersSerializer, QuestionaireSerializer)
 from rest_framework import viewsets
-from .models import Survey, Category, Question, Answers
-from .serializers import SurveySerializer, CategorySerializer, QuestionSerializer, AnswersSerializer
+# from .models import Survey, Category, Question, Answers
+from .serializers import SurveySerializer, CategorySerializer,  AnswersSerializer
 
 
 # Create your views here.
@@ -22,11 +22,10 @@ class SurveyView(viewsets.ModelViewSet):
 
 class CategoryView(viewsets.ModelViewSet):
 
-    permission_classes = (permissions.AllowAny,)  
+    permission_classes = (permissions.AllowAny,)
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-
 
 
 # class QuestionView(viewsets.ModelViewSet):
@@ -39,8 +38,7 @@ class AnswersView(viewsets.ModelViewSet):
     serializer_class = AnswersSerializer
 
 
-class QuestionaireView(viewsets.GenericViewSet, generics.RetrieveUpdateDestroyAPIView,generics.ListCreateAPIView):
-    permission_classes = (permissions.AllowAny,)                 
+class QuestionaireView(viewsets.GenericViewSet, generics.RetrieveUpdateDestroyAPIView, generics.ListCreateAPIView):
+    permission_classes = (permissions.AllowAny,)
     queryset = Questionaire.objects.all()
     serializer_class = QuestionaireSerializer
-

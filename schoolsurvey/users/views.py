@@ -1,9 +1,10 @@
 from django.shortcuts import render
-from rest_framework import generics,permissions
+from rest_framework import viewsets, mixins,generics,permissions
 from .models import User
+from .models import UserProfile, Role
 from django.contrib.auth import authenticate,login
 from rest_framework_jwt.settings import api_settings
-from .serializers import TokenSerializer,UserSerializer
+from .serializers import TokenSerializer,UserSerializer, ProfileSerializer, RoleSerializer
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -73,79 +74,87 @@ class LoginView(generics.CreateAPIView):
             },status=status.HTTP_200_OK)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-class UserListView(generics.ListAPIView):
+class UserViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    def retrieve(self, request):
-        user = User.objects.all()
+    # def retrieve(self, request):
+    #     user = User.objects.all()
         
-        serializer = UserSerializer(user)
-        print(serializer)
-        return Response(user,status=status.HTTP_200_OK)
+    #     serializer = UserSerializer(user)
+    #     print(serializer)
+    #     return Response(user,status=status.HTTP_200_OK)
 
-class UserDetailsView(generics.RetrieveUpdateDestroyAPIView):
-    """
-    GET users/:id/
-    PUT users/:id/
-    DELETE users/:id/
-    """
-    # permission_classes = (permissions.IsAuthenticated)
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+# class UserDetailsView(generics.RetrieveUpdateDestroyAPIView):
+#     """
+#     GET users/:id/
+#     PUT users/:id/
+#     DELETE users/:id/
+#     """
+#     # permission_classes = (permissions.IsAuthenticated)
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#     permission_classes = (permissions.AllowAny,)
+
+#     def get(self,request,*args,**kwargs):
+#         try:
+#             a_user = self.queryset.get(pk=kwargs['pk'])
+#             return Response(UserSerializer(a_user).data)
+#         except User.DoesNotExist:
+#             return Response(
+#                 data={
+#                     "message":"User with id: {} does not exist".format(kwargs['pk'])
+#                 },
+#                 status=status.HTTP_404_NOT_FOUND
+#             )
+
+#     def put(self,request,*args,**kwargs):
+#         email = request.data.get("email","")
+#         password = request.data.get("password","")
+#         username = request.data.get("username","")
+#         if not email and not username:
+#             return Response(
+#                 data={
+#                     "message":"A user must have a email and a username"
+#                 },
+#                 status=status.HTTP_400_BAD_REQUEST
+#             )
+#         try:
+#             a_user = self.queryset.get(pk=kwargs['pk'])
+#             serializer = UserSerializer()
+#             updated_user = serializer.update(a_user,request.data)
+#             return Response(UserSerializer(updated_user).data)
+#         except User.DoesNotExist:
+#             return Response(
+#                 data={
+#                     "message":"user with id:{} does not exist".format(kwargs["pk"])
+#                 },
+#                 status=status.HTTP_404_NOT_FOUND
+#             )
+
+#         def delete(self,request,*args,**kwargs):
+#             try:
+#                 a_user = self.queryset.get(pk=kwargs["pk"])
+#                 a_user.delete()
+#                 return Response(status=status.HTTP_204_NO_CONTENT)
+#             except User.DoesNotExist:
+#                 return Response(
+#                     data={
+#                         "message":"User with id:{} does not exist".format(kwargs["pk"])
+#                     },
+#                     status=status.HTTP_404_NOT_FOUND
+#                 )
+
+class UsersProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
-
-    def get(self,request,*args,**kwargs):
-        try:
-            a_user = self.queryset.get(pk=kwargs['pk'])
-            return Response(UserSerializer(a_user).data)
-        except User.DoesNotExist:
-            return Response(
-                data={
-                    "message":"User with id: {} does not exist".format(kwargs['pk'])
-                },
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-    def put(self,request,*args,**kwargs):
-        email = request.data.get("email","")
-        password = request.data.get("password","")
-        username = request.data.get("username","")
-        if not email and not username:
-            return Response(
-                data={
-                    "message":"A user must have a email and a username"
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        try:
-            a_user = self.queryset.get(pk=kwargs['pk'])
-            serializer = UserSerializer()
-            updated_user = serializer.update(a_user,request.data)
-            return Response(UserSerializer(updated_user).data)
-        except User.DoesNotExist:
-            return Response(
-                data={
-                    "message":"user with id:{} does not exist".format(kwargs["pk"])
-                },
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        def delete(self,request,*args,**kwargs):
-            try:
-                a_user = self.queryset.get(pk=kwargs["pk"])
-                a_user.delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
-            except User.DoesNotExist:
-                return Response(
-                    data={
-                        "message":"User with id:{} does not exist".format(kwargs["pk"])
-                    },
-                    status=status.HTTP_404_NOT_FOUND
-                )
+    queryset = UserProfile.objects.all()
+    serializer_class = ProfileSerializer
 
 
-
+class RolesViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Role.objects.all()
+    serializer_class = RoleSerializer
 # class SchoolViewSet(viewsets.ModelViewSet):
 #     queryset = School.objects.all()
 #     serializer_class = SchoolSerializer
