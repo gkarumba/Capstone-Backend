@@ -37,7 +37,7 @@ class Category(models.Model):
     objects = models.Manager()
 
 
-DEFAULT_CATEGORY_ID = 1
+DEFAULT_CATEGORY_ID = 6
 
 
 class Answers(models.Model):

@@ -28,7 +28,7 @@ class QuestionaireSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Questionaire
-        fields = ('id', 'pages',)
+        fields = ('id', 'pages', 'category')
 
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
