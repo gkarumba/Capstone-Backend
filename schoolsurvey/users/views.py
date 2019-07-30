@@ -1,15 +1,18 @@
 from django.shortcuts import render
-from rest_framework import viewsets, mixins,generics,permissions
+from rest_framework import viewsets, mixins, generics, permissions
 from .models import User
 from .models import UserProfile, Role
-from django.contrib.auth import authenticate,login
+from django.contrib.auth.models import Group
+from django.contrib.auth import authenticate, login
 from rest_framework_jwt.settings import api_settings
-from .serializers import TokenSerializer,UserSerializer, ProfileSerializer, RoleSerializer
+from .serializers import TokenSerializer, UserSerializer, ProfileSerializer, RoleSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from django.core import serializers
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+
 
 class RegisterUsersView(generics.CreateAPIView):
     """
@@ -17,28 +20,29 @@ class RegisterUsersView(generics.CreateAPIView):
     """
     permission_classes = (permissions.AllowAny,)
 
-    def post(self,request,*args,**kwargs):
-        username = request.data.get("username","")
-        password = request.data.get("password","")
-        email = request.data.get("email","")
-        role = request.data.get("role","Admin")
+    def post(self, request, *args, **kwargs):
+        username = request.data.get("username", "")
+        password = request.data.get("password", "")
+        email = request.data.get("email", "")
+        # role = request.data.get("role", 1)
         if not username and not password and not email:
             return Response(
                 data={
-                    "message":"username,password and email is required to register a user"
+                    "message": "username,password and email is required to register a user"
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
         new_user = User.objects.create_user(
-            username=username,password=password,email=email,role=role
+            username=username, password=password, email=email,
         )
-        querys = User.objects.filter(email=email ).values()
+        querys = User.objects.filter(email=email).values()
         print(querys)
         return Response(data={
             "message": "Account created successfully",
             "user_details": querys[0]
         },
             status=status.HTTP_201_CREATED)
+
 
 class LoginView(generics.CreateAPIView):
     """
@@ -58,21 +62,27 @@ class LoginView(generics.CreateAPIView):
             # login saves the user’s ID in the session,
             # using Django’s session framework.
             login(request, user)
-            querys = User.objects.filter(email=email ).values()
-            print(querys[0]['role'])
+            querys = User.objects.filter(email=email).values()
+            print(querys[0])
+
+            groups = serializers.serialize("json",
+                                           (Group.objects.all().filter(user=querys[0]['id'])), fields=('fields'))
             serializer = TokenSerializer(data={
                 # using drf jwt utility functions to generate a token
                 "token": jwt_encode_handler(
                     jwt_payload_handler(user)
                 )})
             serializer.is_valid()
+
             return Response(data={
-                'message':'Login successful',
-                'userRole':querys[0]['role'],
+                'message': 'Login successful',
+                # 'groups': groups,
                 'id': querys[0]['id'],
-                'token': serializer.data['token']
-            },status=status.HTTP_200_OK)
+                'token': serializer.data['token'],
+                'query': querys[0],
+            }, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
+
 
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
@@ -80,7 +90,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     # def retrieve(self, request):
     #     user = User.objects.all()
-        
+
     #     serializer = UserSerializer(user)
     #     print(serializer)
     #     return Response(user,status=status.HTTP_200_OK)
@@ -145,6 +155,7 @@ class UserViewSet(viewsets.ModelViewSet):
 #                     status=status.HTTP_404_NOT_FOUND
 #                 )
 
+
 class UsersProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     queryset = UserProfile.objects.all()
@@ -158,7 +169,7 @@ class RolesViewSet(viewsets.ModelViewSet):
 # class SchoolViewSet(viewsets.ModelViewSet):
 #     queryset = School.objects.all()
 #     serializer_class = SchoolSerializer
-    
+
 #     def get_permissions(self):
 #         permission_classes = []
 #         if self.action == 'create':

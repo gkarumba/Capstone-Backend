@@ -16,6 +16,7 @@ router.register('answers', views.AnswersView)
 
 urlpatterns = [
 
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('auth-login', include('rest_framework.urls'))
 
 ]
