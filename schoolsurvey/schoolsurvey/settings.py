@@ -95,7 +95,7 @@ WSGI_APPLICATION = 'schoolsurvey.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'survey1',
+        'NAME': 'gpts',
         'USER': 'postgres',
         'HOST': 'localhost',
         'PORT': '5432',

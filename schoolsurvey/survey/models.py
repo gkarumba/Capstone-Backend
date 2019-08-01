@@ -27,6 +27,7 @@ class Category(models.Model):
     # allows_edit = models.CharField(max_length=255)
     # identifier = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
+
     # form_builder_json = models.CharField(max_length=255)
     # custom_submit_url = models.CharField(max_length=255)
 
