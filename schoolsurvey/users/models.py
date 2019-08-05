@@ -32,7 +32,9 @@ def add_to_default_group(sender, instance, **kwargs):
         group = Group.objects.get(name='Respondent')
         user.groups.add(group)
 
+
 post_save.connect(add_to_default_group, sender=User)
+
 # class UserRole(models.Model):
 #     roles = models.CharField(blank=True, null=True,max_length=255)
 #     def __unicode__(self):
@@ -50,3 +52,13 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user
+
+
+def create_dummy_profile(sender, instance, ** kwargs):
+    user_id = instance.id
+    if kwargs["created"]:
+        profile = UserProfile.objects.create(user=instance)
+        profile.save()
+
+
+post_save.connect(create_dummy_profile, sender=User)

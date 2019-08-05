@@ -34,6 +34,7 @@ class CategoryView(viewsets.ModelViewSet):
 
 
 class AnswersView(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
     queryset = Answers.objects.all()
     serializer_class = AnswersSerializer
 

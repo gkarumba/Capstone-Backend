@@ -159,6 +159,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class UsersProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     queryset = UserProfile.objects.all()
+    lookup_field = 'user'
     serializer_class = ProfileSerializer
 
 
