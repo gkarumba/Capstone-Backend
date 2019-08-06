@@ -43,11 +43,11 @@ post_save.connect(add_to_default_group, sender=User)
 
 class UserProfile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    dob = models.DateField()
-    address = models.CharField(max_length=255)
+    telephone = models.CharField(max_length=255)
+    postaladdress = models.CharField(max_length=255)
     county = models.CharField(max_length=50)
-    city = models.CharField(max_length=50)
-    zip = models.CharField(max_length=5)
+#     city = models.CharField(max_length=50)
+#      = models.CharField(max_length=5)
     # photo = models.ImageField(upload_to='uploads', blank=True)
 
     def __str__(self):

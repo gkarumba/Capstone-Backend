@@ -43,3 +43,4 @@ class QuestionaireView(viewsets.GenericViewSet, generics.RetrieveUpdateDestroyAP
     permission_classes = (permissions.AllowAny,)
     queryset = Questionaire.objects.all()
     serializer_class = QuestionaireSerializer
+    lookup_field = 'category'
